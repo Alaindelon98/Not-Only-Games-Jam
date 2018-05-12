@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Manager : MonoBehaviour {
 
-    [SerializeField] private List<Actor> L_actors = new List<Actor>();
+    public List<Actor> L_actors = new List<Actor>();
     [SerializeField] private GameManager I_gameManager;
 
 

@@ -10,16 +10,19 @@ public class Actor : MonoBehaviour {
 
     [SerializeField] private float m_speed;
     [SerializeField] private TheGrid I_grid;
-    [SerializeField] private List<Actor> L_actors = new List<Actor>();
     [SerializeField] private John I_john;
     [SerializeField] private GameManager I_gameManager;
+    [SerializeField] private Manager I_manager;
+
     [SerializeField] private Transform m_waitingPoint;
+
+    private List<Actor> L_actors = new List<Actor>();
 
 
     // Use this for initialization
     void Start () {
-		
-	}
+		L_actors = I_manager.L_actors;
+    }
 	
 	// Update is called once per frame
 	void Update () {
