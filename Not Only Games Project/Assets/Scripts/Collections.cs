@@ -24,5 +24,14 @@ public enum S_GameState
     ExitPlayGround,
     StartPlayGround,
     ActorsMakeActions,
+    StartGame,
+    EndGame,
+    Tutorial
 
+}
+public enum s_PhoneState
+{
+    TakingPicture,
+    PicturePosted,
+    Hiding
 }

@@ -83,6 +83,7 @@ public class John : MonoBehaviour {
                 switch (nextState)
                 {
                     case S_ActorState.MoveTowards:
+                        //change
                         break;
                     case S_ActorState.Patrol:
                         break;

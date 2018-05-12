@@ -13,8 +13,7 @@ public class Actor : MonoBehaviour {
     [SerializeField] private List<Actor> L_actors = new List<Actor>();
     [SerializeField] private John I_john;
     [SerializeField] private GameManager I_gameManager;
-
-
+    [SerializeField] private Transform m_waitingPoint;
 
 
     // Use this for initialization
@@ -29,7 +28,7 @@ public class Actor : MonoBehaviour {
         if (Input.GetMouseButton(0))
         {
             print(m_currentState);
-            ChangeState(m_currentState, S_ActorState.MoveTowards);
+            ChangeState(m_currentState, S_ActorState.LookAtSmartphone);
         }
 
 
@@ -41,17 +40,19 @@ public class Actor : MonoBehaviour {
         {
             case S_ActorState.Idle:
                 break;
-            case S_ActorState.MoveTowards:
+            case S_ActorState.MoveTowards: //Characters walks around
 
                 if(m_newDestination != null)
                 {
                     this.transform.position = Vector3.MoveTowards(this.transform.position, m_newDestination, m_speed * Time.deltaTime);
                 }
+                if(this.transform.position == m_newDestination && this.transform.position != m_waitingPoint.position) 
+                    //checks if has arrived to the destination and gives a new one unless it's resting
+                {
+                    GetRandomDestination();
+                }
+                
 
-                break;
-            case S_ActorState.Patrol:
-                break;
-            case S_ActorState.RunAway:
                 break;
             case S_ActorState.DefaultAction:
                 break;
@@ -67,14 +68,26 @@ public class Actor : MonoBehaviour {
                 }
                 break;
             case S_ActorState.BullyActionGroupal:
-
+                if (this.transform.position != m_newDestination)
+                {
+                    this.transform.position = Vector3.MoveTowards(this.transform.position, m_newDestination, m_speed * Time.deltaTime);
+                }
+                else
+                {
+                    //DO ANIMATION OF ALL SONS
+                    //START ANIMATION OF THE PLAYER
+                }
                 break;
             case S_ActorState.LookAtSmartphone:
+                //ANIMACION MIRAR AL TFNO
+
+                //QUAN SACABI LANIMACIO
+                ChangeState(m_currentState, S_ActorState.MoveTowards);
                 break;
         }
     }
 
-    private void ChangeState(S_ActorState currentState, S_ActorState nextState)
+    public void ChangeState(S_ActorState currentState, S_ActorState nextState)
     {
         switch(currentState)
         {
@@ -91,8 +104,6 @@ public class Actor : MonoBehaviour {
                 {
                     case S_ActorState.Idle:
                         break;
-                    case S_ActorState.Patrol:
-                        break;
                     case S_ActorState.RunAway:
                         break;
                     case S_ActorState.BullyActionIndividual:
@@ -101,63 +112,7 @@ public class Actor : MonoBehaviour {
                         break;
                 }
                 break;
-            case S_ActorState.Patrol:
-                switch (nextState)
-                {
-                    case S_ActorState.DefaultAction:
-                        break;
-                    case S_ActorState.MoveTowards:
-
-                        if(I_gameManager.m_currentState == S_GameState.ExitPlayGround)
-                        GetRandomDestination();
-
-                        break;
-                    case S_ActorState.RunAway:
-                        break;
-                    case S_ActorState.BullyActionIndividual:
-                        m_newDestination = new Vector3(I_john.transform.position.x, I_john.transform.position.y - 1, I_john.transform.position.z);
-
-                        break;
-                }
-                break;
-            case S_ActorState.RunAway:
-                switch (nextState)
-                {
-                    case S_ActorState.MoveTowards:
-
-                        GetRandomDestination();
-
-                        break;
-                    case S_ActorState.Patrol:
-                        break;
-                    case S_ActorState.DefaultAction:
-                        break;
-                    case S_ActorState.BullyActionIndividual:
-                        m_newDestination = new Vector3(I_john.transform.position.x, I_john.transform.position.y - 1, I_john.transform.position.z);
-
-                        break;
-                }
-                break;
-            case S_ActorState.DefaultAction:
-                switch (nextState)
-                {
-                    case S_ActorState.MoveTowards:
-
-                        GetRandomDestination();
-
-                        break;
-                    case S_ActorState.RunAway:
-                        break;
-                    case S_ActorState.BullyActionIndividual:
-                        m_newDestination = new Vector3(I_john.transform.position.x, I_john.transform.position.y - 1, I_john.transform.position.z);
-
-                        break;
-                    case S_ActorState.BullyActionGroupal:
-                        m_newDestination = new Vector3(I_john.transform.position.x, I_john.transform.position.y - 1, I_john.transform.position.z);
-
-                        break;
-                }
-                break;
+           
             case S_ActorState.BullyActionIndividual:
                 switch(nextState)
                 {
@@ -180,9 +135,9 @@ public class Actor : MonoBehaviour {
             case S_ActorState.LookAtSmartphone:
                 switch(nextState)
                 {
-                    case S_ActorState.RunAway:
-                        break;
                     case S_ActorState.MoveTowards:
+                        m_newDestination = m_waitingPoint.position;
+                        print(m_waitingPoint);
                         break;
                 }
                 break;
