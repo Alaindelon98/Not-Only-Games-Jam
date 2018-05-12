@@ -8,6 +8,8 @@ public class ScreenShot : MonoBehaviour
     [SerializeField] private Transform m_renderCamera;
     [SerializeField] private RenderTexture m_renderTexture;
 
+    public Vector2Int m_photoSize = Vector2Int.zero;
+
     private Texture2D m_photo;
     private Vector3 m_mousePos = Vector3.zero;
 
@@ -16,16 +18,25 @@ public class ScreenShot : MonoBehaviour
 
     private void LateUpdate()
     {
-        MoveMouse();
+        F_MoveMouse();
 
-        if (Input.GetKeyDown(KeyCode.A))
+        if (Input.GetButtonDown("TakePhoto"))
             F_TakePhoto();
 
         if (vAux_photoReady)
             F_ShowPhoto();
     }
 
-    private void MoveMouse()
+    private Vector2 F_GetRenderCameraOrthograficSize()
+    {
+        Camera l_renderCamera = m_renderCamera.GetComponent<Camera>();
+        float l_height = l_renderCamera.orthographicSize * 2;
+        float l_width = l_height * l_renderCamera.aspect;
+
+        return new Vector2(l_width, l_height);
+    }
+
+    private void F_MoveMouse()
     {
         float l_height = Camera.main.orthographicSize * 2;
         float l_width = l_height * Camera.main.aspect;
@@ -69,7 +80,7 @@ public class ScreenShot : MonoBehaviour
 
     private Texture2D F_toTexture2D(RenderTexture rTex)
     {
-        Texture2D tex = new Texture2D(1280, 720, TextureFormat.RGB24, false);
+        Texture2D tex = new Texture2D(m_photoSize.x, m_photoSize.y, TextureFormat.RGB24, false);
         RenderTexture.active = rTex;
         tex.ReadPixels(new Rect(0, 0, rTex.width, rTex.height), 0, 0);
         tex.Apply();
