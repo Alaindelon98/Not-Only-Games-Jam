@@ -280,6 +280,10 @@ Prefab:
       propertyPath: m_RootOrder
       value: 4
       objectReference: {fileID: 0}
+    - target: {fileID: 1172306712680102, guid: 1b62827099470ed4da54a069e2093104, type: 2}
+      propertyPath: m_Name
+      value: walk_boy1
+      objectReference: {fileID: 0}
     - target: {fileID: 114348573139459516, guid: 1b62827099470ed4da54a069e2093104,
         type: 2}
       propertyPath: I_grid
