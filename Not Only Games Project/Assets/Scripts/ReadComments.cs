@@ -13,24 +13,18 @@ public class ReadComments : MonoBehaviour {
 
     public TextAsset l_MainFile;
 
-	// Use this for initialization
-	void Start () {
-        ReadString();
-        SplitComments();
-        List<string> newList = GetComments('B');
+    // Use this for initialization
+    void Start() {
+    }
 
-        foreach (string element in newList) { Debug.Log(element); }
+    // Update is called once per frame
+    void Update() {
+    }
 
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
-
-    void ReadString()
+    public void ReadString()
     {
-        l_CommentsString = l_MainFile.text;       
+        l_CommentsString = l_MainFile.text;
+        SplitComments();
     }
 
     void SplitComments()
