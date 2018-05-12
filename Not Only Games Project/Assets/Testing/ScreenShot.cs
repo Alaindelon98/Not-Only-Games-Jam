@@ -4,21 +4,32 @@ using UnityEngine;
 
 public class ScreenShot : MonoBehaviour
 {
-
     [SerializeField] private SpriteRenderer m_renderer;
-    [SerializeField] private RectInt m_section;
+    [SerializeField] private Transform m_renderCamera;
+    [SerializeField] private RenderTexture m_renderTexture;
 
     private Texture2D m_photo;
+    private Vector3 m_mousePos = Vector3.zero;
+
     private int vAux_num = 0;
     private bool vAux_photoReady = false;
 
-    public void LateUpdate()
+    private void LateUpdate()
     {
+        MoveMouse();
+
         if (Input.GetKeyDown(KeyCode.A))
             F_TakePhoto();
 
         if (vAux_photoReady)
             F_ShowPhoto();
+    }
+
+    private void MoveMouse()
+    {
+        float l_height = Camera.main.orthographicSize * 2;
+        float l_width = l_height * Camera.main.aspect;
+        m_mousePos = new Vector3(Camera.main.ScreenToViewportPoint(Input.mousePosition).x * l_width - l_width / 2, Camera.main.ScreenToViewportPoint(Input.mousePosition).y * l_height - l_height / 2, 0);
     }
 
     private void F_ShowPhoto()
@@ -29,6 +40,8 @@ public class ScreenShot : MonoBehaviour
 
     public void F_TakePhoto()
     {
+        m_renderCamera.position = new Vector3(m_mousePos.x, m_mousePos.y, m_renderCamera.position.z);
+
         StartCoroutine(Coroutine_CaptureScreenShot());
 
         //Texture2D l_photo = ScreenCapture.CaptureScreenshotAsTexture();
@@ -42,15 +55,8 @@ public class ScreenShot : MonoBehaviour
         string l_path = Application.persistentDataPath + "/Assets/Screenshots"
                 + "_" + "_" + Screen.width + "X" + Screen.height + "" + ".png";
 
-        Vector2 pos = new Vector2(m_section.x, m_section.y);
-        Vector2 size = Camera.main.WorldToScreenPoint(new Vector2(m_section.width, m_section.height));
-        Rect l_section = new Rect(pos, size);
-        print(pos + ", " + size);
+        m_photo = F_toTexture2D(m_renderTexture);
 
-        m_photo = new Texture2D((int)l_section.width, (int)l_section.height);
-        //Get Image from screen
-        m_photo.ReadPixels(new Rect(l_section.x, l_section.y, l_section.width, l_section.height), 0, 0);
-        m_photo.Apply();
         //Convert to png
         byte[] l_imageBytes = m_photo.EncodeToPNG();
 
@@ -61,8 +67,12 @@ public class ScreenShot : MonoBehaviour
         vAux_photoReady = true;
     }
 
-    private void OnDrawGizmos()
+    private Texture2D F_toTexture2D(RenderTexture rTex)
     {
-        Gizmos.DrawWireCube(new Vector3(m_section.x, m_section.y), new Vector3(m_section.width, m_section.height));
+        Texture2D tex = new Texture2D(1280, 720, TextureFormat.RGB24, false);
+        RenderTexture.active = rTex;
+        tex.ReadPixels(new Rect(0, 0, rTex.width, rTex.height), 0, 0);
+        tex.Apply();
+        return tex;
     }
 }
