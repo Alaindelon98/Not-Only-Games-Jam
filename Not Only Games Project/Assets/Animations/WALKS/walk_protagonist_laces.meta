@@ -1,7 +1,13 @@
 fileFormatVersion: 2
+<<<<<<< HEAD:Not Only Games Project/Assets/Animations/WALKS/walk_protagonist_laces.meta
 guid: 5a319204a8a8e2b42821b6b054b0ea07
 folderAsset: yes
 timeCreated: 1526163570
+=======
+guid: 9c9b2c2fc11a7014d9d9f2a8777fb2cc
+folderAsset: yes
+timeCreated: 1526162812
+>>>>>>> 072f7004c2269c71059f8a7c955541d0a10386cc:Not Only Games Project/Assets/Animations/WALKS/walk_protagonist_laces.meta
 licenseType: Free
 DefaultImporter:
   externalObjects: {}

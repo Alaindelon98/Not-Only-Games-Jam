@@ -1,6 +1,11 @@
 fileFormatVersion: 2
+<<<<<<< HEAD:Not Only Games Project/Assets/Animations/IDLES/idle_protagonist/idle_protagonist_11.png.meta
 guid: 0e69b3b0cc42d3b44b382a049c76abbf
 timeCreated: 1526163574
+=======
+guid: 923492991502aae4fbc48a6252fe23c6
+timeCreated: 1526162818
+>>>>>>> 072f7004c2269c71059f8a7c955541d0a10386cc:Not Only Games Project/Assets/Animations/IDLES/idle_protagonist/idle_protagonist_11.png.meta
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName: {}

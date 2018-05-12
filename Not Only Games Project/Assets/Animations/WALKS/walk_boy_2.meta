@@ -1,7 +1,13 @@
 fileFormatVersion: 2
+<<<<<<< HEAD:Not Only Games Project/Assets/Animations/WALKS/walk_boy_2.meta
 guid: 110ab68b83829814a997425309f2d4d9
 folderAsset: yes
 timeCreated: 1526163570
+=======
+guid: 48ab139661b18f3488e39d060b183c6e
+folderAsset: yes
+timeCreated: 1526162812
+>>>>>>> 072f7004c2269c71059f8a7c955541d0a10386cc:Not Only Games Project/Assets/Animations/WALKS/walk_boy_2.meta
 licenseType: Free
 DefaultImporter:
   externalObjects: {}

@@ -1,7 +1,13 @@
 fileFormatVersion: 2
+<<<<<<< HEAD:Not Only Games Project/Assets/Animations/WALKS/walk_girl2.meta
 guid: 52282a12b64dd164397ae5f890852b1c
 folderAsset: yes
 timeCreated: 1526163570
+=======
+guid: bf8ee630806c6fb4ebab8745db33382f
+folderAsset: yes
+timeCreated: 1526162812
+>>>>>>> 072f7004c2269c71059f8a7c955541d0a10386cc:Not Only Games Project/Assets/Animations/WALKS/walk_girl2.meta
 licenseType: Free
 DefaultImporter:
   externalObjects: {}
