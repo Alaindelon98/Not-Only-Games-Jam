@@ -24,12 +24,14 @@ public class Actor : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if(Input.GetMouseButtonUp(0))
+        StateMachine();
+
+        if (Input.GetMouseButton(0))
         {
-            m_currentState = S_ActorState.MoveTowards;
+            print(m_currentState);
+            ChangeState(m_currentState, S_ActorState.MoveTowards);
         }
 
-        StateMachine();
 
 	}
 
@@ -54,22 +56,33 @@ public class Actor : MonoBehaviour {
             case S_ActorState.DefaultAction:
                 break;
             case S_ActorState.BullyActionIndividual:
+                if(this.transform.position != m_newDestination)
+                {
+                    this.transform.position = Vector3.MoveTowards(this.transform.position, m_newDestination, m_speed * Time.deltaTime);
+                }
+                else
+                {
+                    //DO ANIMATION
+                    //START ANIMATION OF THE PLAYER
+                }
                 break;
             case S_ActorState.BullyActionGroupal:
+
                 break;
             case S_ActorState.LookAtSmartphone:
                 break;
         }
     }
 
-    private void ChangeState(S_ActorState currentStae, S_ActorState nextState)
+    private void ChangeState(S_ActorState currentState, S_ActorState nextState)
     {
-        switch(currentStae)
+        switch(currentState)
         {
             case S_ActorState.Idle:
                 switch(nextState)
                 {
                     case S_ActorState.MoveTowards:
+                            GetRandomDestination();
                         break;
                 }
                 break;
@@ -83,6 +96,8 @@ public class Actor : MonoBehaviour {
                     case S_ActorState.RunAway:
                         break;
                     case S_ActorState.BullyActionIndividual:
+                        m_newDestination = new Vector3(I_john.transform.position.x, I_john.transform.position.y - 1, I_john.transform.position.z); 
+
                         break;
                 }
                 break;
@@ -93,12 +108,15 @@ public class Actor : MonoBehaviour {
                         break;
                     case S_ActorState.MoveTowards:
 
+                        if(I_gameManager.m_currentState == S_GameState.ExitPlayGround)
                         GetRandomDestination();
 
                         break;
                     case S_ActorState.RunAway:
                         break;
                     case S_ActorState.BullyActionIndividual:
+                        m_newDestination = new Vector3(I_john.transform.position.x, I_john.transform.position.y - 1, I_john.transform.position.z);
+
                         break;
                 }
                 break;
@@ -115,6 +133,8 @@ public class Actor : MonoBehaviour {
                     case S_ActorState.DefaultAction:
                         break;
                     case S_ActorState.BullyActionIndividual:
+                        m_newDestination = new Vector3(I_john.transform.position.x, I_john.transform.position.y - 1, I_john.transform.position.z);
+
                         break;
                 }
                 break;
@@ -129,6 +149,12 @@ public class Actor : MonoBehaviour {
                     case S_ActorState.RunAway:
                         break;
                     case S_ActorState.BullyActionIndividual:
+                        m_newDestination = new Vector3(I_john.transform.position.x, I_john.transform.position.y - 1, I_john.transform.position.z);
+
+                        break;
+                    case S_ActorState.BullyActionGroupal:
+                        m_newDestination = new Vector3(I_john.transform.position.x, I_john.transform.position.y - 1, I_john.transform.position.z);
+
                         break;
                 }
                 break;
@@ -161,10 +187,11 @@ public class Actor : MonoBehaviour {
                 }
                 break;
         }
+        m_currentState = nextState;
     }
 
 
-    private void GetRandomDestination() // gets random position and iterates again if its the same new destination of another actor or any actor is doing an action there
+    private void GetRandomDestination() //gets random position and iterates again if its the same new destination of another actor or any actor is doing an action there
     {
         CNode l_node;
         l_node = I_grid.GetRandomNode();
