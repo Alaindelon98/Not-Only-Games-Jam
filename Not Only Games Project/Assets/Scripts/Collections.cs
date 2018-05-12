@@ -3,7 +3,7 @@
     Idle,
     Patrol,
     MoveTowards,
-    DefaultAction,
+    LookAtSmartPhone,
     RunAway,
     BullyActionIndividual,
     BullyActionGroupal,
