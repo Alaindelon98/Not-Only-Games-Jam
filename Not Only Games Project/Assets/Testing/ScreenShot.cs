@@ -45,7 +45,7 @@ public class ScreenShot : MonoBehaviour {
         string path = Application.persistentDataPath + "/Assets/Screenshots"
                 + "_" + "_" + Screen.width + "X" + Screen.height + "" + ".png";
 
-        Texture2D screenImage = new Texture2D(Screen.width, Screen.height);
+        Texture2D screenImage = new Texture2D(Screen.width/2, Screen.height/2);
         //Get Image from screen
         screenImage.ReadPixels(new Rect(0, 0, Screen.width/2, Screen.height/2), 0, 0);
         screenImage.Apply();
