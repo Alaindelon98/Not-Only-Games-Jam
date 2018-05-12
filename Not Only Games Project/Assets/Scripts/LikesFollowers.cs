@@ -9,11 +9,18 @@ public class LikesFollowers : MonoBehaviour {
 
     [SerializeField]
     Text likesText, followersText;
+
+    int currentPhoto;
 	void Start () {
 		
 	}
 
     void Update () {
-		
+        //if (change photo)
+        //{
+        //    likesText = 0;
+        //}
+
+        //if (iles)
 	}
 }
