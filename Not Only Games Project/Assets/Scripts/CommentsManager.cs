@@ -15,11 +15,9 @@ public class CommentsManager : MonoBehaviour {
     public Transform m_startLine;
     public Transform m_deathLine;
 
-
-
     public float l_moveSpace;
 
-
+    private int l_newLinesOcuped;
 
 
 	// Use this for initialization
@@ -27,7 +25,8 @@ public class CommentsManager : MonoBehaviour {
 
         l_spawnedList = new List<Text>();
         i_readComments.ReadString();
-        SpawnComments('6');
+        //SpawnComments('6');
+        l_newLinesOcuped = 0;
 	}
 	
 	// Update is called once per frame
@@ -50,30 +49,35 @@ public class CommentsManager : MonoBehaviour {
     {
         l_spawnedList.Clear();
 
-
         //for (int idx = l_commentsList.Count-1; idx >= 0; idx--)
         for(int idx = 0; idx < l_commentsList.Count -1; idx++)
         {
+            //Add new element
+            Text newText = Instantiate(m_commentPrefab, m_canvas.transform);
+            newText.text = l_commentsList[idx];
+            Canvas.ForceUpdateCanvases();
+            l_newLinesOcuped = newText.cachedTextGenerator.lines.Count;
+            newText.transform.position = m_startLine.transform.position;
+            l_spawnedList.Add(newText);
+
+
             //Move all the elements on the spawned list
             //Check if the element can be destroyed
 
-            for (int i = l_spawnedList.Count -1; i >= 0; i--)
+            for (int i = l_spawnedList.Count -2; i >= 0; i--)
             {   
-                l_spawnedList[i].transform.position = new Vector3(l_spawnedList[i].transform.position.x, l_spawnedList[i].transform.position.y - l_moveSpace, l_spawnedList[i].transform.position.z);
+                l_spawnedList[i].transform.position = new Vector3(l_spawnedList[i].transform.position.x, l_spawnedList[i].transform.position.y - l_moveSpace*l_newLinesOcuped, l_spawnedList[i].transform.position.z);
 
                 if (l_spawnedList[i].transform.position.y < m_deathLine.position.y)
                 {
-                    l_spawnedList.Remove(l_spawnedList[i]);
+                    
                     l_spawnedList[i].transform.position = new Vector3(l_spawnedList[i].transform.position.x + 1000, l_spawnedList[i].transform.position.y - l_moveSpace, l_spawnedList[i].transform.position.z);
+                    l_spawnedList.Remove(l_spawnedList[i]);
                 }
             }
 
-            //Add new element
-            Text newText = Instantiate(m_commentPrefab, m_canvas.transform);
-            newText.transform.position = m_startLine.transform.position;
-            newText.text = l_commentsList[idx];
-            l_spawnedList.Add(newText);
-            yield return new WaitForSeconds(0.5f);
+            
+            yield return new WaitForSeconds(Random.Range(0.3f, 1.5f));
         }
 
         yield break;
