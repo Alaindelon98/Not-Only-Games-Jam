@@ -2,82 +2,67 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ScreenShot : MonoBehaviour {
+public class ScreenShot : MonoBehaviour
+{
 
-    Texture foto;
-    int num = 0;
+    [SerializeField] private SpriteRenderer m_renderer;
+    [SerializeField] private RectInt m_section;
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		if(Input.GetMouseButtonUp(0))
-        {
-            num++;
-            StartCoroutine(captureScreenshot());
+    private Texture2D m_photo;
+    private int vAux_num = 0;
+    private bool vAux_photoReady = false;
 
-        }
-
-    }
-
-
-    IEnumerator RecordFrame()
+    public void LateUpdate()
     {
+        if (Input.GetKeyDown(KeyCode.A))
+            F_TakePhoto();
 
-        yield return new WaitForEndOfFrame();
-        var texture = ScreenCapture.CaptureScreenshotAsTexture();
-        // do something with texture
-        foto = texture;
-
-        // cleanup
-        Object.Destroy(texture);
+        if (vAux_photoReady)
+            F_ShowPhoto();
     }
 
+    private void F_ShowPhoto()
+    {
+        m_renderer.sprite = Sprite.Create(m_photo, new Rect(0, 0, m_photo.width, m_photo.height), new Vector2(0.5f, 0.5f));
+        vAux_photoReady = false;
+    }
 
+    public void F_TakePhoto()
+    {
+        StartCoroutine(Coroutine_CaptureScreenShot());
 
-    IEnumerator captureScreenshot()
+        //Texture2D l_photo = ScreenCapture.CaptureScreenshotAsTexture();
+        //m_renderer.sprite = Sprite.Create(l_photo, new Rect(0, 0, l_photo.width, l_photo.height), new Vector2(0.5f, 0.5f));
+    }
+
+    IEnumerator Coroutine_CaptureScreenShot()
     {
         yield return new WaitForEndOfFrame();
 
-        string path = Application.persistentDataPath + "/Assets/Screenshots"
+        string l_path = Application.persistentDataPath + "/Assets/Screenshots"
                 + "_" + "_" + Screen.width + "X" + Screen.height + "" + ".png";
 
-        Texture2D screenImage = new Texture2D(Screen.width/2, Screen.height/2);
+        Vector2 pos = new Vector2(m_section.x, m_section.y);
+        Vector2 size = Camera.main.WorldToScreenPoint(new Vector2(m_section.width, m_section.height));
+        Rect l_section = new Rect(pos, size);
+        print(pos + ", " + size);
+
+        m_photo = new Texture2D((int)l_section.width, (int)l_section.height);
         //Get Image from screen
-        screenImage.ReadPixels(new Rect(0, 0, Screen.width/2, Screen.height/2), 0, 0);
-        screenImage.Apply();
+        m_photo.ReadPixels(new Rect(l_section.x, l_section.y, l_section.width, l_section.height), 0, 0);
+        m_photo.Apply();
         //Convert to png
-        byte[] imageBytes = screenImage.EncodeToPNG();
+        byte[] l_imageBytes = m_photo.EncodeToPNG();
 
         //Save image to file
-        System.IO.File.WriteAllBytes("prueba" + num + ".png", imageBytes);
+        System.IO.File.WriteAllBytes("prueba" + vAux_num + ".png", l_imageBytes);
+        vAux_num++;
+
+        vAux_photoReady = true;
     }
 
-
-        public void LateUpdate()
+    private void OnDrawGizmos()
     {
-        StartCoroutine(RecordFrame());
-        //StartCoroutine(captureScreenshot());
-
-    }
-
-    private void OnGUI()
-    {
-        if(foto != null)
-        {
-
-                float width = 600;
-                float height = 600;
-                GUI.DrawTexture(new Rect((Screen.width / 2) - (width / 2), (Screen.height / 2) - (height / 2), width, height), foto);
-                //GUI.DrawTexture(new Rect(10, 10, 60, 60), foto, ScaleMode.ScaleToFit, true, 10.0F);
-
-            //if (Event.current.type.Equals(EventType.Repaint))
-              //  Graphics.DrawTexture(new Rect(10, 10, 100, 100), foto);
-
-
-        }
+        Gizmos.DrawWireCube(new Vector3(m_section.x, m_section.y), new Vector3(m_section.width, m_section.height));
     }
 }
