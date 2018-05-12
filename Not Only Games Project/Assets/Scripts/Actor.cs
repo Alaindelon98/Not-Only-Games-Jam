@@ -8,6 +8,8 @@ public class Actor : MonoBehaviour {
 
     public Vector3 m_newDestination;
 
+
+
     [SerializeField] private float m_speed;
     [SerializeField] private TheGrid I_grid;
     [SerializeField] private John I_john;
@@ -18,6 +20,8 @@ public class Actor : MonoBehaviour {
 
     private List<Actor> L_actors = new List<Actor>();
 
+    private float vAux_currentTime;
+    private float m_cooldownNewRandomPosition;
 
     // Use this for initialization
     void Start () {
@@ -52,7 +56,16 @@ public class Actor : MonoBehaviour {
                 if(this.transform.position == m_newDestination && this.transform.position != m_waitingPoint.position) 
                     //checks if has arrived to the destination and gives a new one unless it's resting
                 {
-                    GetRandomDestination();
+                    if (vAux_currentTime >= m_cooldownNewRandomPosition)
+                    {
+                        GetRandomDestination();
+                        vAux_currentTime = 0f;
+                    }
+                    else
+                    {
+                        vAux_currentTime += Time.deltaTime;
+                    }
+
                 }
                 
 
@@ -103,6 +116,8 @@ public class Actor : MonoBehaviour {
                 }
                 break;
             case S_ActorState.MoveTowards:
+
+                vAux_currentTime = 0f;
                 switch (nextState)
                 {
                     case S_ActorState.Idle:
@@ -115,6 +130,7 @@ public class Actor : MonoBehaviour {
                         break;
                 }
                 break;
+
            
             case S_ActorState.BullyActionIndividual:
                 switch(nextState)

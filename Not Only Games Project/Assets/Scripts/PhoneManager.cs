@@ -6,7 +6,7 @@ public class PhoneManager : MonoBehaviour {
 
     public s_PhoneState m_currentState;
 
-    [SerializeField] private List <Actor> L_actors = new List<Actor> ();
+    [SerializeField] private John I_jhon;
 
 	// Use this for initialization
 	void Start () {
@@ -52,9 +52,9 @@ public class PhoneManager : MonoBehaviour {
 
     }
 
-    private void CheckQualityOfThePicture( )
-    {
-
-    }
+    //private void CheckQualityOfThePicture( )
+    //{
+    //    if(I_jhon.transform.position.x < )
+    //}
 
 }
