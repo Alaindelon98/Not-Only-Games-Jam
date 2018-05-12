@@ -8,6 +8,8 @@ public class ScreenShot : MonoBehaviour
     [SerializeField] private Transform m_renderCamera;
     [SerializeField] private RenderTexture m_renderTexture;
 
+    public Vector2Int m_cameraSize = Vector2Int.zero;
+
     private Texture2D m_photo;
     private Vector3 m_mousePos = Vector3.zero;
 
@@ -16,7 +18,7 @@ public class ScreenShot : MonoBehaviour
 
     private void LateUpdate()
     {
-        MoveMouse();
+        F_MoveMouse();
 
         if (Input.GetKeyDown(KeyCode.A))
             F_TakePhoto();
@@ -25,7 +27,16 @@ public class ScreenShot : MonoBehaviour
             F_ShowPhoto();
     }
 
-    private void MoveMouse()
+    public Vector2 F_GetRenderCameraOrthographicDimentions()
+    {
+        Camera l_renderCamera = m_renderCamera.GetComponent<Camera>();
+        float l_height = l_renderCamera.orthographicSize * 2;
+        float l_width = l_height * l_renderCamera.aspect;
+
+        return new Vector2(l_width, l_height);
+    }
+
+    private void F_MoveMouse()
     {
         float l_height = Camera.main.orthographicSize * 2;
         float l_width = l_height * Camera.main.aspect;
@@ -67,12 +78,17 @@ public class ScreenShot : MonoBehaviour
         vAux_photoReady = true;
     }
 
-    private Texture2D F_toTexture2D(RenderTexture rTex)
+    private Texture2D F_toTexture2D(RenderTexture _rTex)
     {
-        Texture2D tex = new Texture2D(1280, 720, TextureFormat.RGB24, false);
-        RenderTexture.active = rTex;
-        tex.ReadPixels(new Rect(0, 0, rTex.width, rTex.height), 0, 0);
-        tex.Apply();
-        return tex;
+        Texture2D l_tex = new Texture2D(m_cameraSize.x, m_cameraSize.y, TextureFormat.RGB24, false);
+        RenderTexture.active = _rTex;
+        l_tex.ReadPixels(new Rect(0, 0, _rTex.width, _rTex.height), 0, 0);
+        l_tex.Apply();
+        return l_tex;
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawWireCube(m_mousePos, new Vector3(m_cameraSize.x, m_cameraSize.y));
     }
 }
