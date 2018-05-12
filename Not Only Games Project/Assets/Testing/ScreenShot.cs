@@ -4,6 +4,12 @@ using UnityEngine;
 
 public class ScreenShot : MonoBehaviour
 {
+    [SerializeField] private GameObject m_flash;
+    [SerializeField] private float m_scaleSocialMediaPhoto;
+    [SerializeField] private Transform m_socialMediaPhoto;
+    [SerializeField] private float m_speed;
+
+    [Space(10)]
     [SerializeField] private SpriteRenderer m_renderer;
     [SerializeField] private Transform m_renderCamera;
     [SerializeField] private RenderTexture m_renderTexture;
@@ -13,14 +19,36 @@ public class ScreenShot : MonoBehaviour
     private Texture2D m_photo;
     private Vector3 m_mousePos = Vector3.zero;
 
-    private int vAux_num = 0;
+    private int vAux_photoNum = 0;
     private bool vAux_photoReady = false;
+    private bool vAux_animation = false;
+    private float vAux_normalScale;
 
-    private void LateUpdate()
+    private void Start()
+    {
+        vAux_normalScale = m_renderer.transform.localScale.x;
+    }
+
+    private void Update()
     {
         F_MoveMouse();
 
-        if (Input.GetButtonDown("TakePhoto"))
+        if (vAux_animation)
+        {
+            m_renderer.transform.position = Vector3.MoveTowards(m_renderer.transform.position, m_socialMediaPhoto.position, m_speed * Time.deltaTime);
+            float l_scale = Mathf.Lerp(m_renderer.transform.localScale.x, m_scaleSocialMediaPhoto, m_speed * 0.75f * Time.deltaTime);
+            m_renderer.transform.localScale = new Vector3(l_scale, l_scale, l_scale);
+
+            if (Vector3.Distance(m_renderer.transform.position, m_socialMediaPhoto.position) == 0)
+            {
+                vAux_animation = false;
+            }
+        }
+    }
+
+    private void LateUpdate()
+    {
+        if (Input.GetButtonDown("TakePhoto") && !vAux_animation && !vAux_photoReady)
             F_TakePhoto();
 
         if (vAux_photoReady)
@@ -45,18 +73,23 @@ public class ScreenShot : MonoBehaviour
 
     private void F_ShowPhoto()
     {
+        m_renderer.enabled = true;
         m_renderer.sprite = Sprite.Create(m_photo, new Rect(0, 0, m_photo.width, m_photo.height), new Vector2(0.5f, 0.5f));
         vAux_photoReady = false;
+
+        F_Flash();
+        Invoke("F_Flash", 0.5f);
+        Invoke("F_StartAnimation", 1.5f);
     }
 
     public void F_TakePhoto()
     {
+        m_renderer.transform.localScale = new Vector3(vAux_normalScale, vAux_normalScale, vAux_normalScale);
+        m_renderer.transform.position = new Vector3(0, 0, -2);
+        m_renderer.enabled = false;
         m_renderCamera.position = new Vector3(m_mousePos.x, m_mousePos.y, m_renderCamera.position.z);
 
         StartCoroutine(Coroutine_CaptureScreenShot());
-
-        //Texture2D l_photo = ScreenCapture.CaptureScreenshotAsTexture();
-        //m_renderer.sprite = Sprite.Create(l_photo, new Rect(0, 0, l_photo.width, l_photo.height), new Vector2(0.5f, 0.5f));
     }
 
     IEnumerator Coroutine_CaptureScreenShot()
@@ -72,8 +105,8 @@ public class ScreenShot : MonoBehaviour
         byte[] l_imageBytes = m_photo.EncodeToPNG();
 
         //Save image to file
-        System.IO.File.WriteAllBytes("prueba" + vAux_num + ".png", l_imageBytes);
-        vAux_num++;
+        System.IO.File.WriteAllBytes("prueba" + vAux_photoNum + ".png", l_imageBytes);
+        vAux_photoNum++;
 
         vAux_photoReady = true;
     }
@@ -85,5 +118,16 @@ public class ScreenShot : MonoBehaviour
         tex.ReadPixels(new Rect(0, 0, rTex.width, rTex.height), 0, 0);
         tex.Apply();
         return tex;
+    }
+
+    private void F_Flash()
+    {
+        bool l_active = m_flash.activeSelf;
+        m_flash.SetActive(!l_active);
+    }
+
+    private void F_StartAnimation()
+    {
+        vAux_animation = true;
     }
 }
