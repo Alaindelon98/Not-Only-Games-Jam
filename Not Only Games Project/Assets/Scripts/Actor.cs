@@ -6,7 +6,7 @@ public class Actor : MonoBehaviour {
 
     public S_ActorState m_currentState;
 
-    private Vector3 m_newDestination;
+    public Vector3 m_newDestination;
 
     [SerializeField] private float m_speed;
     [SerializeField] private TheGrid I_grid;
@@ -54,7 +54,7 @@ public class Actor : MonoBehaviour {
                 
 
                 break;
-            case S_ActorState.DefaultAction:
+            case S_ActorState.LookAtSmartPhone:
                 break;
             case S_ActorState.BullyActionIndividual:
                 if(this.transform.position != m_newDestination)
@@ -163,7 +163,7 @@ public class Actor : MonoBehaviour {
                 }
                 else if (actor.transform.position == m_newDestination)
                 {
-                    if (actor.m_currentState == S_ActorState.DefaultAction || actor.m_currentState == S_ActorState.BullyActionIndividual)
+                    if (actor.m_currentState == S_ActorState.LookAtSmartPhone || actor.m_currentState == S_ActorState.BullyActionIndividual)
                     {
                         GetRandomDestination();
                     }

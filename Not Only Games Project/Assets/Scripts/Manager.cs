@@ -22,7 +22,7 @@ public class Manager : MonoBehaviour {
     {
         foreach(Actor actor in L_actors)
             {
-                actor.ChangeState(actor.m_currentState, S_ActorState.DefaultAction);
+                actor.ChangeState(actor.m_currentState, S_ActorState.LookAtSmartPhone);
             }
     }
 
