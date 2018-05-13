@@ -19,8 +19,6 @@ public class CommentsManager : MonoBehaviour {
 
     private int l_newLinesOcuped;
 
-    int currentPhoto;
-
 
 	// Use this for initialization
 	void Start () {
@@ -33,34 +31,8 @@ public class CommentsManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            Debug.Log("Pressed");
-            currentPhoto++;
-            if (currentPhoto >= 8)
-            {
-                currentPhoto = 0;
-            }
-
-            char charScene = '0';
-
-            switch (currentPhoto) {
-                case 0: currentPhoto = '0'; break;
-                case 1: currentPhoto = '1'; break;
-                case 2: currentPhoto = '2'; break;
-                case 3: currentPhoto = '3'; break;
-                case 4: currentPhoto = '4'; break;
-                case 5: currentPhoto = '5'; break;
-                case 6: currentPhoto = '6'; break;
-                case 7: currentPhoto = '7'; break;
-
-            }
-
-            SpawnComments(charScene);
-            Debug.Log("int " + currentPhoto);
-            Debug.Log(charScene);
-        }
-    }
+		
+	}
 
     public void SpawnComments(char l_sceneChar)
     {
@@ -75,7 +47,6 @@ public class CommentsManager : MonoBehaviour {
 
     IEnumerator SpawnNextComment()
     {
-        foreach(Text text in l_spawnedList) { Destroy(text.gameObject); }
         l_spawnedList.Clear();
 
         //for (int idx = l_commentsList.Count-1; idx >= 0; idx--)
